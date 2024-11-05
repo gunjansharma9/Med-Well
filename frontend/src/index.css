@@ -2,10 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-.active hr{
-    @apply block
+/* For active hr, using Tailwind's block class */
+.active hr {
+    display: block;
 }
 
-::-webkit-scrollbar{
-    @apply hidden
+/* For hiding the scrollbar, using direct CSS as Tailwind doesn’t support ::webkit-scrollbar */
+::-webkit-scrollbar {
+    display: none;
 }
