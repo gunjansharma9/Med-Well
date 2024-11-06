@@ -4,7 +4,6 @@ import Speciality from './../components/Speciality';
 import TopDoctors from '../components/TopDoctors';
 import Banner from '../components/Banner';
 import Benefits from '../components/Benefits';
-import Footer from '../components/Footer';
 
 const Home = () => {
   return (
@@ -14,7 +13,6 @@ const Home = () => {
       <TopDoctors/>
       <Banner/>
       <Benefits/>
-      <Footer/>
     </div>
   )
 }
