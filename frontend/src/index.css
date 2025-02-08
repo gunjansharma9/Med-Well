@@ -3,7 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* For active hr, using Tailwind's block class */
+
 *{
     font-family: Outfit;
 }
@@ -12,7 +12,7 @@
     display: block;
 }
 
-/* For hiding the scrollbar, using direct CSS as Tailwind doesn’t support ::webkit-scrollbar */
+/* For hiding the scrollbar */
 ::-webkit-scrollbar {
     display: none;
 }
