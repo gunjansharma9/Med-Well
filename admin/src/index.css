@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+:root {
+    /* --primary-color: #5F6FFF;  */
+    --primary-color: #3d84ef; 
+  }
+
+  .text-primary {
+    color: var(--primary-color);
+  }
+  
+  .bg-primary {
+    background-color: var(--primary-color);
+  }
+
+::-webkit-scrollbar{
+  @apply hidden
+}
