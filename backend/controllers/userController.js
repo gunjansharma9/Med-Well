@@ -188,7 +188,15 @@ const bookAppointment = async(req,res) => {
             slots_booked[slotDate] = []
             slots_booked[slotDate].push(slotTime)
         }
-        const userData = await userModel.findById(userId).select('-password')
+        const userData = await userModel.findById(userId).select('-password');
+
+        if (!userData) {
+            return res.json({ 
+                success: false,
+                message: "User not found"
+            });
+        }
+        console.log("User Data Before Saving",userData)
 
         delete docData.slots_booked
 
@@ -207,6 +215,10 @@ const bookAppointment = async(req,res) => {
         await newAppointment.save()
 
         await doctorModel.findByIdAndUpdate(docId,{slots_booked})
+        
+        // await userModel.findByIdAndUpdate(userId, {
+        //     $push: { appointments: newAppointment._id },
+        // });
 
         res.json({
             success:true,

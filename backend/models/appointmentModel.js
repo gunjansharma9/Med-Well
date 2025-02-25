@@ -21,6 +21,10 @@ const appointmentSchema = new mongoose.Schema({
         type:Object,
         required:true,
     },
+    userData:{
+        type:Object,
+        required:true,
+    },
     amount:{
         type:Number,
         required:true

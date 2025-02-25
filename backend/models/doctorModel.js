@@ -53,7 +53,13 @@ const doctorSchema = new mongoose.Schema({
     slots_booked:{
         type:Object,
         default:{}
-    }
+    },
+    dob: {
+    type: Date,
+    required: true,
+    default: new Date('1984-01-01') // Example default date
+}
+
 },{minimize:false})
 // so that we can create default empty block for slots
 
