@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { doctors } from './../assets/assets';
 import { AppContext } from './../context/AppContext';
 import axios from 'axios';
 import {toast} from 'react-toastify'
@@ -25,6 +24,7 @@ const MyAppointment = () => {
 
       if(data.success){
         setAppointments(data.appointments.reverse())
+        console.log('checking userdata')
         console.log(data.appointments)
       }
     }catch(error){

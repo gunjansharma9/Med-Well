@@ -1,9 +1,29 @@
 import React from 'react'
+import { useContext } from 'react'
+import { AdminContext } from '../../context/AdminContext'
+import { useEffect } from 'react'
+import { assets } from '../../assets/assets'
 
 const Dashboard = () => {
-  return (
-    <div>
-      
+  const {aToken,getDashData,cancelAppointment,dashData} = useContext(AdminContext)
+
+  useEffect(() => {
+    if(aToken){
+      getDashData()
+    }
+  },[aToken])
+
+  return dashData && (
+    <div className='m-5'>
+      <div>
+        <div>
+          <img src={assets.doctor_icon} />
+          <div>
+            <p>{dashData.doctors}</p>
+            <p>Doctors</p>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
