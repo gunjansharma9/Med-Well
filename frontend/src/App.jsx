@@ -9,20 +9,19 @@ import Contact from './pages/Contact'
 import Appointment from './pages/Appointment'
 import Navbar from './components/Navbar'
 import About from './pages/About'
-import Reports from './pages/Reports'
 import Footer from './components/Footer'
 import { ToastContainer } from 'react-toastify';
 
 const App = () => {
   return (
-    <div className='mx-4 sm:mx-[10%]'>
+    // <div className='mx-4 sm:mx-[10%]'>
+    <div>
       <ToastContainer/>
       <Navbar/>
       <Routes>
         <Route path='/' element={<Home/>} />
         <Route path='/doctors' element={<Doctors/>} />
         <Route path='/doctors/:speciality' element={<Doctors/>} />
-        <Route path='/report' element={<Reports/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/about' element={<About/>}/>
         <Route path='/contact' element={<Contact/>} />
