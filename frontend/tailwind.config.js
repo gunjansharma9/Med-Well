@@ -7,7 +7,6 @@ export default {
   theme: {
     extend: {
       colors:{
-        // 'primary' : "#8BC34A"
         'primary' : "#193b6d"
       },
       gridTemplateColumns:{
@@ -17,3 +16,4 @@ export default {
   },
   plugins: [],
 }
+

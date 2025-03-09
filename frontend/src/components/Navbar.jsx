@@ -76,7 +76,73 @@
 // export default Navbar
 
 
-import React, { useContext, useState } from 'react';
+// import React, { useContext, useState } from 'react';
+// import { assets } from './../assets/assets';
+// import { NavLink, useNavigate } from 'react-router-dom';
+// import { AppContext } from '../context/AppContext';
+
+// const Navbar = () => {
+//   const navigate = useNavigate();
+//   const { token, setToken, userData } = useContext(AppContext);
+//   const [showMenu, setShowMenu] = useState(false);
+
+//   const logout = () => {
+//     setToken(false);
+//     localStorage.removeItem('token');
+//   };
+
+//   return (
+//     <div className='flex items-center justify-between text-sm py-4 mb-5 border-b border-gray-300 shadow-sm px-6 md:px-12 bg-white'>
+//       <img onClick={() => navigate('/')} className='w-44 cursor-pointer transition-transform duration-200 hover:scale-105' src={assets.major_logo} alt='' />
+//       <ul className='hidden md:flex items-center gap-6 font-medium'>
+//         {['/', '/doctors', '/about', '/contact'].map((path, index) => (
+//           <NavLink 
+//             key={index} 
+//             to={path} 
+//             className={({ isActive }) => `relative py-1 text-base transition-colors duration-300 hover:text-primary ${isActive ? 'text-primary after:content-[" "] after:absolute after:left-0 after:bottom-0 after:w-full after:h-0.5 after:bg-primary after:transition-transform after:duration-300 after:scale-x-100' : 'after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300'}`}
+//           >
+//             <li className='px-3 py-1'>{path.replace('/', '').toUpperCase() || 'HOME'}</li>
+//           </NavLink>
+//         ))}
+//       </ul>
+//       <div className='flex items-center gap-6'>
+//         {token && userData ? (
+//           <div className='relative flex items-center gap-2 cursor-pointer group'>
+//             <img className='w-10 h-10 rounded-full border-2 border-gray-300' src={userData.image} alt='' />
+//             <img className='w-3 transition-transform duration-200 group-hover:rotate-180' src={assets.dropdown_icon} alt='' />
+//             <div className='absolute top-12 right-0 w-48 bg-white shadow-lg rounded-lg p-4 hidden group-hover:block z-20'>
+//               <p onClick={() => navigate('my-profile')} className='hover:text-black cursor-pointer py-2 transition-all duration-200'>My Profile</p>
+//               <p onClick={() => navigate('my-appointments')} className='hover:text-black cursor-pointer py-2 transition-all duration-200'>My Appointments</p>
+//               <p onClick={logout} className='hover:text-red-600 cursor-pointer py-2 transition-all duration-200'>Logout</p>
+//             </div>
+//           </div>
+//         ) : (
+//           <button onClick={() => navigate('/login')} className='bg-primary text-white px-6 py-3 rounded-full font-bold hidden md:block transition-all duration-300 hover:bg-opacity-80'>Create account</button>
+//         )}
+//         <img onClick={() => setShowMenu(true)} className='w-6 md:hidden cursor-pointer' src={assets.menu_icon} alt='' />
+//         {/* Mobile Menu */}
+//         <div className={`${showMenu ? 'fixed w-full h-screen bg-white shadow-xl z-20' : 'hidden'} md:hidden right-0 top-0 bottom-0 transition-all`}>
+//           <div className='flex items-center justify-between px-6 py-6 border-b border-gray-300'>
+//             <img className='w-36' src={assets.major_logo} alt='' />
+//             <img className='w-7 cursor-pointer' onClick={() => setShowMenu(false)} src={assets.cross_icon} alt='' />
+//           </div>
+//           <ul className='flex flex-col items-center gap-5 mt-6 text-lg font-medium'>
+//             {['/', '/doctors', '/about', '/contact'].map((path, index) => (
+//               <NavLink key={index} onClick={() => setShowMenu(false)} to={path} className='block py-3 px-6 rounded-md w-full text-center transition-all duration-200 hover:bg-gray-100'>
+//                 {path.replace('/', '').toUpperCase() || 'HOME'}
+//               </NavLink>
+//             ))}
+//           </ul>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Navbar;
+
+
+import React, { useContext, useState, useRef, useEffect } from 'react';
 import { assets } from './../assets/assets';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
@@ -85,17 +151,32 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { token, setToken, userData } = useContext(AppContext);
   const [showMenu, setShowMenu] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
   const logout = () => {
     setToken(false);
     localStorage.removeItem('token');
+    setShowDropdown(false);
   };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
 
   return (
     <div className='flex items-center justify-between text-sm py-4 mb-5 border-b border-gray-300 shadow-sm px-6 md:px-12 bg-white'>
       <img onClick={() => navigate('/')} className='w-44 cursor-pointer transition-transform duration-200 hover:scale-105' src={assets.major_logo} alt='' />
+      
       <ul className='hidden md:flex items-center gap-6 font-medium'>
-        {['/', '/doctors', '/about', '/contact'].map((path, index) => (
+        {['/', '/doctors','/guide','/reports','/about', '/contact'].map((path, index) => (
           <NavLink 
             key={index} 
             to={path} 
@@ -105,21 +186,33 @@ const Navbar = () => {
           </NavLink>
         ))}
       </ul>
+
       <div className='flex items-center gap-6'>
         {token && userData ? (
-          <div className='relative flex items-center gap-2 cursor-pointer group'>
-            <img className='w-10 h-10 rounded-full border-2 border-gray-300' src={userData.image} alt='' />
-            <img className='w-3 transition-transform duration-200 group-hover:rotate-180' src={assets.dropdown_icon} alt='' />
-            <div className='absolute top-12 right-0 w-48 bg-white shadow-lg rounded-lg p-4 hidden group-hover:block z-20'>
-              <p onClick={() => navigate('my-profile')} className='hover:text-black cursor-pointer py-2 transition-all duration-200'>My Profile</p>
-              <p onClick={() => navigate('my-appointments')} className='hover:text-black cursor-pointer py-2 transition-all duration-200'>My Appointments</p>
-              <p onClick={logout} className='hover:text-red-600 cursor-pointer py-2 transition-all duration-200'>Logout</p>
-            </div>
+          <div className='relative flex items-center gap-2 cursor-pointer' ref={dropdownRef}>
+            <img 
+              className='w-10 h-10 rounded-full border-2 border-gray-300' 
+              src={userData.image} 
+              alt='' 
+              onClick={() => setShowDropdown((prev) => !prev)}
+            />
+            <img className={`w-3 transition-transform duration-200 ${showDropdown ? 'rotate-180' : ''}`} src={assets.dropdown_icon} alt='' />
+
+            {/* Dropdown Menu */}
+            {showDropdown && (
+              <div className='absolute top-12 right-0 w-48 bg-white shadow-lg rounded-lg p-4 z-20'>
+                <p onClick={() => navigate('/my-profile')} className='hover:text-black cursor-pointer py-2 transition-all duration-200'>My Profile</p>
+                <p onClick={() => navigate('/my-appointments')} className='hover:text-black cursor-pointer py-2 transition-all duration-200'>My Appointments</p>
+                <p onClick={logout} className='hover:text-red-600 cursor-pointer py-2 transition-all duration-200'>Logout</p>
+              </div>
+            )}
           </div>
         ) : (
           <button onClick={() => navigate('/login')} className='bg-primary text-white px-6 py-3 rounded-full font-bold hidden md:block transition-all duration-300 hover:bg-opacity-80'>Create account</button>
         )}
+        
         <img onClick={() => setShowMenu(true)} className='w-6 md:hidden cursor-pointer' src={assets.menu_icon} alt='' />
+
         {/* Mobile Menu */}
         <div className={`${showMenu ? 'fixed w-full h-screen bg-white shadow-xl z-20' : 'hidden'} md:hidden right-0 top-0 bottom-0 transition-all`}>
           <div className='flex items-center justify-between px-6 py-6 border-b border-gray-300'>

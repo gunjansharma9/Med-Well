@@ -11,6 +11,8 @@ import Navbar from './components/Navbar'
 import About from './pages/About'
 import Footer from './components/Footer'
 import { ToastContainer } from 'react-toastify';
+import SymptomGuide from './components/SymptomGuide'
+import Report from './pages/Reports'
 
 const App = () => {
   return (
@@ -28,6 +30,8 @@ const App = () => {
         <Route path='/my-profile' element={<MyProfile/>} />
         <Route path='/my-appointments' element={<MyAppointment/>} />
         <Route path='/appointment/:docId' element={<Appointment/>} />
+        <Route path='/guide' element={<SymptomGuide/>} />
+        <Route path='/reports' element={<Report/>}  />
       </Routes>
       <Footer/>
     </div>

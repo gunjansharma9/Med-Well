@@ -359,4 +359,119 @@ const verifyRazorpay = async (req, res) => {
         })
     }
 }
-export {registerUser,loginUser,getProfile,updateProfile,bookAppointment,listAppointment,cancelAppointment,paymentRazorpay,verifyRazorpay}
+
+
+const uploadReport = async (req, res) => {
+    try {
+        // Add file existence check
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                error: 'No file uploaded or invalid file type'
+            });
+        }
+
+        const user = await userModel.findById(req.user._id);
+
+        // Add upload date and format
+        const reportData = {
+            public_id: req.file.public_id,
+            url: req.file.secure_url, // Use secure_url instead of path
+            originalname: req.file.originalname,
+            format: req.file.format,
+            uploadedAt: Date.now()
+        };
+
+        user.reports.push(reportData);
+        await user.save();
+
+        // Return complete report data
+        res.status(201).json({
+            success: true,
+            report: reportData
+        });
+    } catch (error) {
+        // Delete uploaded file if user save fails
+        if (req.file?.public_id) {
+            await cloudinary.uploader.destroy(req.file.public_id);
+        }
+        res.status(500).json({
+            success: false,
+            error: 'Server error: ' + error.message
+        });
+    }
+};
+
+const listReports = async (req, res) => {
+    try {
+      const user = await userModel.findById(req.user._id)
+        .select('reports')
+        .lean();
+  
+      // Move console.log AFTER user is defined
+      console.log('User ID:', req.user._id);
+      console.log('User reports:', user?.reports);
+  
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          error: 'User not found'
+        });
+      }
+  
+      res.status(200).json({
+        success: true,
+        reports: user.reports || []
+      });
+    } catch (error) {
+      console.error('List reports error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Server error: ' + error.message
+      });
+    }
+  };
+
+const deleteReport = async (req, res) => {
+    try {
+        const user = await userModel.findById(req.user._id);
+        const reportId = req.params.reportId;
+
+        // More robust search
+        const reportIndex = user.reports.findIndex(
+            report => report.public_id === reportId
+        );
+
+        if (reportIndex === -1) {
+            return res.status(404).json({
+                success: false,
+                error: 'Report not found'
+            });
+        }
+
+        // Store report data before deletion
+        const deletedReport = user.reports[reportIndex];
+
+        // Remove from array first to prevent cloudinary errors blocking removal
+        user.reports.splice(reportIndex, 1);
+        await user.save();
+
+        // Delete from Cloudinary after successful DB update
+        await cloudinary.uploader.destroy(deletedReport.public_id, {
+            resource_type: deletedReport.format === 'pdf' ? 'raw' : 'image'
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'Report deleted successfully',
+            deletedId: reportId
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: 'Deletion failed: ' + error.message
+        });
+    }
+};
+
+export {registerUser,loginUser,getProfile,updateProfile,bookAppointment,listAppointment,cancelAppointment,paymentRazorpay,verifyRazorpay,uploadReport,listReports,deleteReport}

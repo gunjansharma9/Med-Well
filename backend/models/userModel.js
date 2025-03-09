@@ -33,8 +33,19 @@ const userSchema = new mongoose.Schema({
     phone:{
         type:String,
         default:'0000000000'
-    }
-})
+    },
+    reports:[
+        {
+            public_id:String,
+            url:String,
+            originalname:String,
+            uploadedAt:{
+                type:Date,
+                default:Date.now
+            }
+        }
+    ]
+});
 
 const userModel = mongoose.models.user || mongoose.model('user',userSchema)
 

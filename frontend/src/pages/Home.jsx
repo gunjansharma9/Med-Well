@@ -4,6 +4,7 @@ import Speciality from './../components/Speciality';
 import Banner from '../components/Banner';
 import Benefits from '../components/Benefits';
 import TopDoctors from '../components/TopDoctors';
+import SymptomGuide from '../components/SymptomGuide';
 
 const Home = () => {
   return (
@@ -13,6 +14,7 @@ const Home = () => {
       <TopDoctors/>
       <Banner/>
       <Benefits/>
+      <SymptomGuide/>
     </div>
   )
 }
