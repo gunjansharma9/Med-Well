@@ -363,115 +363,136 @@ const verifyRazorpay = async (req, res) => {
 
 const uploadReport = async (req, res) => {
     try {
-        // Add file existence check
-        if (!req.file) {
-            return res.status(400).json({
-                success: false,
-                error: 'No file uploaded or invalid file type'
+        const {userId} = req.body;
+        const imageFile = req.file;
+
+        if(!userId){
+            return res.json({
+                success:false,
+                message:"User ID is required"
             });
         }
 
-        const user = await userModel.findById(req.user._id);
+        if (!file) {
+            return res.status(400).json({
+                success: false,
+                message: "Report file is required",
+            });
+        }
 
-        // Add upload date and format
+        // Upload report to Cloudinary
+        const result = await cloudinary.uploader.upload(imageFile.path, {
+            resource_type: "auto",
+            folder: "reports",
+            use_filename:true,
+            unique_filename:false
+        });
+
+        const user = await userModel.findById({userId})
         const reportData = {
-            public_id: req.file.public_id,
-            url: req.file.secure_url, // Use secure_url instead of path
-            originalname: req.file.originalname,
-            format: req.file.format,
-            uploadedAt: Date.now()
+            public_id:result.public_id,
+            url:result.secure_url,
+            originalname:file.originalname,
+            uploadedAt:new Date()
         };
 
         user.reports.push(reportData);
         await user.save();
 
-        // Return complete report data
-        res.status(201).json({
+        res.json({
             success: true,
-            report: reportData
+            message: "Report uploaded successfully",
+            reportUrl: result.secure_url,
         });
+
     } catch (error) {
-        // Delete uploaded file if user save fails
-        if (req.file?.public_id) {
-            await cloudinary.uploader.destroy(req.file.public_id);
-        }
+        console.error("Upload Report Error:", error);
         res.status(500).json({
             success: false,
-            error: 'Server error: ' + error.message
+            message: "Server Error: " + error.message,
         });
     }
 };
 
+
+
 const listReports = async (req, res) => {
     try {
-      const user = await userModel.findById(req.user._id)
-        .select('reports')
-        .lean();
-  
-      // Move console.log AFTER user is defined
-      console.log('User ID:', req.user._id);
-      console.log('User reports:', user?.reports);
-  
-      if (!user) {
-        return res.status(404).json({
-          success: false,
-          error: 'User not found'
+        const { userId } = req.body; // Ideally, extract from `req.user._id`
+        console.log('User ID:', userId);
+
+        const user = await userModel.findOne({ _id: userId }).select('reports').lean();
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                error: 'User not found',
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            reports: user.reports || [],
         });
-      }
-  
-      res.status(200).json({
-        success: true,
-        reports: user.reports || []
-      });
     } catch (error) {
-      console.error('List reports error:', error);
-      res.status(500).json({
-        success: false,
-        error: 'Server error: ' + error.message
-      });
+        console.error("List Reports Error:", error);
+        res.status(500).json({
+            success: false,
+            error: "Server error: " + error.message,
+        });
     }
-  };
+};
+
+
 
 const deleteReport = async (req, res) => {
     try {
         const user = await userModel.findById(req.user._id);
         const reportId = req.params.reportId;
 
-        // More robust search
-        const reportIndex = user.reports.findIndex(
-            report => report.public_id === reportId
-        );
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                error: "User not found",
+            });
+        }
+
+        // Find report index
+        const reportIndex = user.reports.findIndex(report => report.public_id === reportId);
 
         if (reportIndex === -1) {
             return res.status(404).json({
                 success: false,
-                error: 'Report not found'
+                error: "Report not found",
             });
         }
 
-        // Store report data before deletion
+        // Extract public ID from Cloudinary URL
         const deletedReport = user.reports[reportIndex];
+        const publicId = deletedReport.url.split('/').pop().split('.')[0]; // Extract ID
 
-        // Remove from array first to prevent cloudinary errors blocking removal
+        // Remove report from user data
         user.reports.splice(reportIndex, 1);
         await user.save();
 
-        // Delete from Cloudinary after successful DB update
-        await cloudinary.uploader.destroy(deletedReport.public_id, {
-            resource_type: deletedReport.format === 'pdf' ? 'raw' : 'image'
+        // Delete from Cloudinary
+        await cloudinary.uploader.destroy(publicId, {
+            resource_type: "auto",
         });
 
         res.status(200).json({
             success: true,
-            message: 'Report deleted successfully',
-            deletedId: reportId
+            message: "Report deleted successfully",
+            deletedId: reportId,
         });
+
     } catch (error) {
+        console.error("Delete Report Error:", error);
         res.status(500).json({
             success: false,
-            error: 'Deletion failed: ' + error.message
+            error: "Deletion failed: " + error.message,
         });
     }
 };
+
 
 export {registerUser,loginUser,getProfile,updateProfile,bookAppointment,listAppointment,cancelAppointment,paymentRazorpay,verifyRazorpay,uploadReport,listReports,deleteReport}

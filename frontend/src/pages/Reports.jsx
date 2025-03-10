@@ -40,10 +40,7 @@ const Report = () => {
         `${backendUrl}/api/user/upload-report`,
         formData,
         {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${token}`
-          }
+          headers: {token}
         }
       );
 
@@ -102,7 +99,7 @@ const Report = () => {
       {/* Reports List */}
       <div className="bg-white p-6 rounded-lg shadow">
         <h3 className="text-xl font-semibold mb-4">Your Medical Reports</h3>
-        
+
         {loading ? (
           <div className="text-center">
             <span className="loading loading-spinner text-primary"></span>
@@ -111,19 +108,22 @@ const Report = () => {
         ) : reports.length > 0 ? (
           <div className="space-y-4">
             {reports.map((report) => (
-              <div key={report.public_id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div key={report?.public_id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-4">
-                  <a 
-                    href={report.url} 
-                    target="_blank" 
+                  {console.log("Report Data:", report)}
+                  <a
+                    href={report?.url ? report.url : '#'}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:underline"
                   >
-                    {report.originalname}
+
+                    {report?.originalname || 'Unnamed Report'}
                   </a>
+
                 </div>
                 <button
-                  onClick={() => handleDelete(report.public_id)}
+                  onClick={() => handleDelete(report?.public_id)}
                   className="text-red-600 hover:text-red-800"
                 >
                   Delete

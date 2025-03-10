@@ -34,17 +34,18 @@ const userSchema = new mongoose.Schema({
         type:String,
         default:'0000000000'
     },
-    reports:[
-        {
-            public_id:String,
-            url:String,
-            originalname:String,
-            uploadedAt:{
-                type:Date,
-                default:Date.now
+    reports: {
+        type: [{
+            public_id: String,
+            url: String,
+            originalname: String,
+            uploadedAt: {
+                type: Date,
+                default: Date.now
             }
-        }
-    ]
+        }],
+        default: [] // Initialize empty array for all users
+    }
 });
 
 const userModel = mongoose.models.user || mongoose.model('user',userSchema)
