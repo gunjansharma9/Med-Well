@@ -97,7 +97,7 @@ const loginUser = async(req,res) => {
 // API to get user profile data
 const getProfile = async(req,res) => {
     try{
-        const {userId} = req.body
+        const userId = req.user.userId;
         const userData = await userModel.findById(userId).select('-password')
 
         res.json({
@@ -116,7 +116,8 @@ const getProfile = async(req,res) => {
 // API to update user profile
 const updateProfile = async(req,res) => {
     try{
-        const {userId,name,phone,address,dob,gender} = req.body
+        const userId = req.user.userId; 
+        const {name,phone,address,dob,gender} = req.body
         const imageFile = req.file
 
         if(!userId){
@@ -236,7 +237,7 @@ const bookAppointment = async(req,res) => {
 // API to get user appointments for frontend my-appointments page
 const listAppointment = async(req,res) => {
     try{
-        const {userId} = req.body
+        const userId = req.user.userId; 
         const appointments = await appointmentModel.find({userId})
         res.json({
             success:true,
@@ -254,7 +255,8 @@ const listAppointment = async(req,res) => {
 // API to cancel appointment
 const cancelAppointment = async(req,res)=>{
     try{
-        const {userId,appointmentId} = req.body
+        const userId = req.user.userId; 
+        const {appointmentId} = req.body
 
         const appointmentData = await appointmentModel.findById(appointmentId)
 
@@ -363,20 +365,24 @@ const verifyRazorpay = async (req, res) => {
 
 const uploadReport = async (req, res) => {
     try {
-        const {userId} = req.body;
+        console.log("Received file:", req.file);
+        console.log("Request Body:", req.body);
+
+        const userId = req.user.userId;
+        console.log(userId)
         const imageFile = req.file;
 
-        if(!userId){
-            return res.json({
-                success:false,
-                message:"User ID is required"
-            });
-        }
-
-        if (!file) {
+        if (!imageFile) {
             return res.status(400).json({
                 success: false,
                 message: "Report file is required",
+            });
+        }
+
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                message: "User ID is required",
             });
         }
 
@@ -384,44 +390,53 @@ const uploadReport = async (req, res) => {
         const result = await cloudinary.uploader.upload(imageFile.path, {
             resource_type: "auto",
             folder: "reports",
-            use_filename:true,
-            unique_filename:false
+            use_filename: true,
+            unique_filename: false,
+            allowed_formats:['jpg','png','pdf'],
         });
 
-        const user = await userModel.findById({userId})
+        const user = await userModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
         const reportData = {
-            public_id:result.public_id,
-            url:result.secure_url,
-            originalname:file.originalname,
-            uploadedAt:new Date()
+            public_id: result.public_id,
+            url: result.secure_url,
+            originalname: imageFile.originalname,
+            resource_type:result.resource_type,
+            uploadedAt: new Date(),
         };
 
         user.reports.push(reportData);
         await user.save();
 
-        res.json({
+        // ✅ Send response only once
+        res.status(200).json({
             success: true,
             message: "Report uploaded successfully",
-            reportUrl: result.secure_url,
+            report:reportData,
         });
 
     } catch (error) {
         console.error("Upload Report Error:", error);
-        res.status(500).json({
-            success: false,
-            message: "Server Error: " + error.message,
-        });
+
+        // ✅ Ensure error response is sent only once
+        if (!res.headersSent) {
+            res.status(500).json({
+                success: false,
+                message: "Server Error: " + error.message,
+            });
+        }
     }
 };
 
 
-
 const listReports = async (req, res) => {
     try {
-        const { userId } = req.body; // Ideally, extract from `req.user._id`
-        console.log('User ID:', userId);
-
+        const userId = req.user.userId;
         const user = await userModel.findOne({ _id: userId }).select('reports').lean();
+
         if (!user) {
             return res.status(404).json({
                 success: false,
@@ -429,9 +444,14 @@ const listReports = async (req, res) => {
             });
         }
 
+        // Sort reports by uploadedAt (newest first)
+        const sortedReports = user.reports.sort((a, b) => {
+            return new Date(b.uploadedAt) - new Date(a.uploadedAt);
+        });
+
         res.status(200).json({
             success: true,
-            reports: user.reports || [],
+            reports: sortedReports || [], 
         });
     } catch (error) {
         console.error("List Reports Error:", error);
@@ -446,8 +466,11 @@ const listReports = async (req, res) => {
 
 const deleteReport = async (req, res) => {
     try {
-        const user = await userModel.findById(req.user._id);
+        const userId = req.user.userId; 
         const reportId = req.params.reportId;
+
+        console.log('[Backend] Deleting report. User ID:', userId, 'Report ID (public_id):', reportId);
+        const user = await userModel.findById(userId);
 
         if (!user) {
             return res.status(404).json({
@@ -456,28 +479,21 @@ const deleteReport = async (req, res) => {
             });
         }
 
-        // Find report index
-        const reportIndex = user.reports.findIndex(report => report.public_id === reportId);
-
-        if (reportIndex === -1) {
+        const report = user.reports.find(report => report.public_id === reportId);
+        if(!report){
             return res.status(404).json({
-                success: false,
-                error: "Report not found",
-            });
+                success:false,
+                error:"Report not found"
+            })
         }
 
-        // Extract public ID from Cloudinary URL
-        const deletedReport = user.reports[reportIndex];
-        const publicId = deletedReport.url.split('/').pop().split('.')[0]; // Extract ID
-
-        // Remove report from user data
-        user.reports.splice(reportIndex, 1);
-        await user.save();
-
         // Delete from Cloudinary
-        await cloudinary.uploader.destroy(publicId, {
-            resource_type: "auto",
+        await cloudinary.uploader.destroy(report.public_id,{
+            resource_type:report.resource_type || "image"
         });
+
+        user.reports = user.reports.filter(r => r.public_id !== reportId);
+        await user.save();
 
         res.status(200).json({
             success: true,

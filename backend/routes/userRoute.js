@@ -35,8 +35,8 @@ userRouter.post('/payment-razorpay', authUser, paymentRazorpay);
 userRouter.post('/verifyRazorpay', authUser, verifyRazorpay);
 
 // Reports
-userRouter.post('/upload-report', authUser, upload.single('report'), uploadReport);
+userRouter.post('/upload-report', authUser, upload.single("image"), uploadReport);
 userRouter.get('/reports', authUser, listReports); 
-userRouter.delete('/report/:reportId', authUser, deleteReport);
+userRouter.delete('/reports/:reportId(*)', authUser, deleteReport);
 
 export default userRouter;

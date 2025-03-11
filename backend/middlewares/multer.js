@@ -28,7 +28,7 @@ const reportStorage = new CloudinaryStorage({
     cloudinary: cloudinary.v2,
     params: async (req, file) => ({
         folder: 'medical-reports',
-        format: file.mimetype.split('/')[1], // Extract format dynamically
+        format: file.mimetype === 'application/pdf' ? 'pdf':'jpg',
         resource_type: 'auto'
     })
 });
