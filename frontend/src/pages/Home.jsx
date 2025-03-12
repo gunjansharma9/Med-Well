@@ -5,6 +5,7 @@ import Banner from '../components/Banner';
 import Benefits from '../components/Benefits';
 import TopDoctors from '../components/TopDoctors';
 import SymptomGuide from '../components/SymptomGuide';
+import FAQSection from '../components/FAQs';
 
 const Home = () => {
   return (
@@ -15,6 +16,7 @@ const Home = () => {
       <Banner/>
       <Benefits/>
       <SymptomGuide/>
+      <FAQSection/>
     </div>
   )
 }

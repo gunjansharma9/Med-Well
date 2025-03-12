@@ -1,10 +1,9 @@
 import React, { useContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom'; // ✅ Import for redirection
-import { AdminContext } from '../context/AdminContext';
-import { assets } from '../assets/assets';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { DoctorContext } from '../context/DoctorContext';
+import { useNavigate } from 'react-router-dom'
+import { AdminContext } from '../context/AdminContext'
+import { DoctorContext } from '../context/DoctorContext'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const Login = () => {
   const [state, setState] = useState('Admin');
@@ -53,40 +52,92 @@ const Login = () => {
   };
 
   return (
-    <form onSubmit={onSubmitHandler} className='min-h-[80vh] flex items-center'>
-      <div className='flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 border rounded-xl text-[#5E5E5E] text-sm shadow-lg'>
-        <p className='text-2xl font-semibold m-auto'>
-          <span className='text-primary'>{state}</span> Login
-        </p>
-        <div className='w-full'>
-          <p>Email</p>
-          <input
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            className='border border-[#DADADA] rounded w-full p-2 mt-1'
-            type="email"
-            required
-          />
-        </div>
-        <div className='w-full'>
-          <p>Password</p>
-          <input
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            className='border border-[#DADADA] rounded w-full p-2 mt-1'
-            type="password"
-            required
-          />
-        </div>
-        <button className='bg-primary text-white w-full py-2 rounded-md text-base'>Login</button>
-        {
-          state === 'Admin'
-            ? <p>Doctor Login? <span className='text-primary underline cursor-pointer' onClick={() => setState('Doctor')}>Click here</span></p>
-            : <p>Admin Login? <span className='text-primary underline cursor-pointer' onClick={() => setState('Admin')}>Click here</span></p>
-        }
-      </div>
-    </form>
-  );
-};
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <form onSubmit={onSubmitHandler} className="w-full max-w-md">
+        <div className="bg-white rounded-xl shadow-md p-8 space-y-6 border border-gray-100">
+          {/* Header Section */}
+          <div className="text-center space-y-4">
+            <div className="mx-auto w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center">
+              <svg 
+                className="w-10 h-10 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+              </svg>
+            </div>
+            <h1 className="text-3xl font-bold text-gray-800">
+              <span className="text-blue-600">{state}</span> Login
+            </h1>
+          </div>
 
-export default Login;
+          {/* Form Fields */}
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+              <input
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                type="email"
+                placeholder="name@example.com"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+              <input
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                type="password"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Action Section */}
+          <button 
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+          >
+            Sign In
+          </button>
+
+          {/* Toggle Link */}
+          <p className="text-center text-gray-600 text-sm">
+            {state === 'Admin' ? (
+              <span>
+                Doctor Login? {' '}
+                <button
+                  type="button"
+                  onClick={() => setState('Doctor')}
+                  className="text-blue-600 hover:text-blue-800 font-medium underline"
+                >
+                  Switch to Doctor
+                </button>
+              </span>
+            ) : (
+              <span>
+                Admin Login? {' '}
+                <button
+                  type="button"
+                  onClick={() => setState('Admin')}
+                  className="text-blue-600 hover:text-blue-800 font-medium underline"
+                >
+                  Switch to Admin
+                </button>
+              </span>
+            )}
+          </p>
+        </div>
+      </form>
+    </div>
+  )
+}
+
+export default Login
