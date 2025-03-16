@@ -10,7 +10,7 @@ const AdminContextProvider = (props) => {
     const [appointments, setAppointments] = useState([]);
     const [dashData,setDashData] = useState(false)
 
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+    const backendUrl = "https://med-well-backend.onrender.com";
 
     const getAllDoctors = async () => {
         try {
@@ -22,8 +22,6 @@ const AdminContextProvider = (props) => {
 
             if (data.success) {
                 setDoctors(data.doctors);
-                // console.log(data.doctors)
-                // toast.success("Doctors fetched successfully");
             } else {
                 toast.error(data.message);
             }
