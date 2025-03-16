@@ -218,10 +218,6 @@ const bookAppointment = async(req,res) => {
 
         await doctorModel.findByIdAndUpdate(docId,{slots_booked})
         
-        // await userModel.findByIdAndUpdate(userId, {
-        //     $push: { appointments: newAppointment._id },
-        // });
-
         res.json({
             success:true,
             message:'Appointment Booked'
