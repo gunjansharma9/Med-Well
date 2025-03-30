@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import { DoctorContext } from '../../context/DoctorContext'
 import { AppContext } from '../../context/AppContext'
 import { assets } from '../../assets/assets'
+import { colgroup } from 'framer-motion/client'
 
 const DoctorAppointment = () => {
   const { dToken, appointments, getAppointments, completeAppointment, cancelAppointment } = useContext(DoctorContext)
@@ -12,7 +13,7 @@ const DoctorAppointment = () => {
       getAppointments()
     }
   }, [dToken])
-
+  
   return (
     <div className='mx-5 my-8 w-full max-w-7xl'>
       <h2 className='mb-6 text-2xl font-semibold text-slate-800'>Patient Appointments</h2>
@@ -32,6 +33,7 @@ const DoctorAppointment = () => {
         {/* Appointments List */}
         <div className='max-h-[70vh] overflow-y-auto'>
           {appointments.reverse().map((item, index) => (
+            
             <div 
               key={item._id}
               className='grid sm:grid-cols-[50px_1.5fr_1fr_1fr_1.5fr_1fr_160px] gap-4 items-center px-6 py-4 border-b border-slate-100 hover:bg-slate-50 transition-colors'
@@ -85,14 +87,14 @@ const DoctorAppointment = () => {
               </div>
 
               {/* Status/Actions */}
-              <div className='flex justify-end'>
+              <div className='flex '>
                 {item.cancelled ? (
-                  <span className='px-3 py-1 rounded-full bg-red-50 text-red-600 text-xs font-medium flex items-center gap-1'>
+                  <span className='px-3 py-2 rounded-full bg-red-50 text-red-600 text-xs font-medium flex items-center gap-1'>
                     <img src={assets.cancel_icon} className='w-4' alt="" />
                     Cancelled
                   </span>
                 ) : item.isCompleted ? (
-                  <span className='px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-xs font-medium flex items-center gap-1'>
+                  <span className='px-3 py-2 rounded-full bg-emerald-50 text-emerald-600 text-xs font-medium flex items-center gap-1'>
                     <img src={assets.tick_icon} className='w-4' alt="" />
                     Completed
                   </span>
@@ -100,13 +102,13 @@ const DoctorAppointment = () => {
                   <div className='flex gap-2'>
                     <button
                       onClick={() => completeAppointment(item._id)}
-                      className='p-2 rounded-lg bg-emerald-100 hover:bg-emerald-200 transition-colors'
+                      className='p-2 rounded-lg bg-emerald-300 hover:bg-emerald-200 transition-colors'
                     >
                       <img src={assets.tick_icon} className='w-5' alt="Complete" />
                     </button>
                     <button
                       onClick={() => cancelAppointment(item._id)}
-                      className='p-2 rounded-lg bg-red-100 hover:bg-red-200 transition-colors'
+                      className='p-2 rounded-lg bg-red-300 hover:bg-red-200 transition-colors'
                     >
                       <img src={assets.cancel_icon} className='w-5' alt="Cancel" />
                     </button>

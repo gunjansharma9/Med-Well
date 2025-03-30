@@ -62,7 +62,6 @@ const addDoctor = async(req,res) => {
             message:"Doctor Added Successfully..."
         })
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -87,7 +86,6 @@ const loginAdmin = async(req,res) => {
             })
         }
     }catch(e){
-        console.log(e)
         res.json({
             success:false,
             message:e.message
@@ -105,7 +103,6 @@ const allDoctors = async(req,res) => {
             doctors
         })
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -122,7 +119,6 @@ const appointmentsAdmin = async(req,res) => {
             appointments
         })
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -153,7 +149,6 @@ const appointmentCancel = async(req,res)=>{
             message:'Appointment Cancelled'
         })
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -180,7 +175,6 @@ const adminDashboard = async(req,res) => {
             dashData
         })
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message

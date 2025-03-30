@@ -14,15 +14,25 @@ const AppContextProvider = (props) => {
     const slotDateFormat = (slotDate) => {
         const dateArray = slotDate.split('_')
         return dateArray[0] + " " + months[Number(dateArray[1])] + " " + dateArray[2]
-    }
-
-    // Function to calculate the age eg. ( 20_01_2000 => 24 )
+    }  
+    
     const calculateAge = (dob) => {
-        const today = new Date()
-        const birthDate = new Date(dob)
-        let age = today.getFullYear() - birthDate.getFullYear()
-        return age
-    }
+        if (!dob) return "N/A"; // missing DOB
+      
+        const birthDate = new Date(dob);
+        const today = new Date();
+      
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        const dayDiff = today.getDate() - birthDate.getDate();
+      
+        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+          age--;
+        }
+      
+        return age;
+      };
+      
 
     const value = {
         backendUrl,

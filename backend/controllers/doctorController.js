@@ -13,7 +13,6 @@ const changeAvailability = async(req,res) => {
             message:'Availability Changed'
         })
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -30,7 +29,6 @@ const doctorList = async(req,res) => {
             doctors
         })
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -65,7 +63,6 @@ const loginDoctor = async(req,res) => {
             })
         }
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -83,7 +80,6 @@ const appointmentsDoctor = async(req,res) => {
             appointments
         })
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -109,7 +105,6 @@ const appointmentComplete = async(req,res) => {
             })
         }
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -135,7 +130,6 @@ const appointmentCancel = async(req,res) => {
             })
         }
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -174,7 +168,6 @@ const doctorDashboard = async(req,res) => {
             dashData
         })
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -201,7 +194,6 @@ const doctorProfile = async(req,res) => {
         });
 
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -219,7 +211,6 @@ const updateDoctorProfile = async(req,res) => {
             message:'Profile Updated'
         })
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message

@@ -50,7 +50,6 @@ const registerUser = async(req,res) => {
             token
         })
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -86,7 +85,6 @@ const loginUser = async(req,res) => {
             })
         }
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -105,7 +103,6 @@ const getProfile = async(req,res) => {
             userData
         })
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -154,7 +151,6 @@ const updateProfile = async(req,res) => {
             message:"Profile Updated"
         })
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -198,7 +194,6 @@ const bookAppointment = async(req,res) => {
                 message: "User not found"
             });
         }
-        console.log("User Data Before Saving",userData)
 
         delete docData.slots_booked
 
@@ -223,7 +218,6 @@ const bookAppointment = async(req,res) => {
             message:'Appointment Booked'
         })
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -241,7 +235,6 @@ const listAppointment = async(req,res) => {
             appointments
         })
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -280,7 +273,6 @@ const cancelAppointment = async(req,res)=>{
             message:'Appointment Cancelled'
         })
     }catch(error){
-        console.log(error)
         res.json({
             success:false,
             message:error.message
@@ -323,7 +315,6 @@ const paymentRazorpay = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(error)
         res.json({ 
             success: false,
             message: error.message 
@@ -351,7 +342,6 @@ const verifyRazorpay = async (req, res) => {
             })
         }
     } catch (error) {
-        console.log(error)
         res.json({ 
             success: false,
             message: error.message 
@@ -362,11 +352,7 @@ const verifyRazorpay = async (req, res) => {
 
 const uploadReport = async (req, res) => {
     try {
-        console.log("Received file:", req.file);
-        console.log("Request Body:", req.body);
-
         const userId = req.user.userId;
-        console.log(userId)
         const imageFile = req.file;
 
         if (!imageFile) {
@@ -466,7 +452,6 @@ const deleteReport = async (req, res) => {
         const userId = req.user.userId; 
         const reportId = req.params.reportId;
 
-        console.log('[Backend] Deleting report. User ID:', userId, 'Report ID (public_id):', reportId);
         const user = await userModel.findById(userId);
 
         if (!user) {
