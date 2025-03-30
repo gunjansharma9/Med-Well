@@ -73,4 +73,8 @@ const AppContextProvider = (props) => {
     );
 };
 
+<<<<<<< HEAD
 export default AppContextProvider;
+=======
+export default AppContextProvider
+>>>>>>> 4eb5c3c (Update AppContext.jsx)
