@@ -50,7 +50,11 @@ const AppContextProvider = (props) => {
         setToken,
         backendUrl,
         userData,setUserData,
+<<<<<<< HEAD
         loadUserProfileData
+=======
+        loadUserProfileData,
+>>>>>>> 971ca5d (backendurl updated)
     }
 
     useEffect(() => {
