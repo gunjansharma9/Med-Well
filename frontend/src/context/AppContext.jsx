@@ -53,12 +53,20 @@ const AppContextProvider = (props) => {
         setUserData,
         loadUserProfileData
     };
+<<<<<<< HEAD
 
     useEffect(() => {
         getDoctorsData();
     }, []);
 
     useEffect(() => {
+=======
+    useEffect(() => {
+        getDoctorsData();
+    }, []);
+
+    useEffect(() => {
+>>>>>>> d437562 (resolving)
         if (token) {
             loadUserProfileData();
         } else {
@@ -74,7 +82,11 @@ const AppContextProvider = (props) => {
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 export default AppContextProvider;
 =======
 export default AppContextProvider
 >>>>>>> 4eb5c3c (Update AppContext.jsx)
+=======
+export default AppContextProvider;
+>>>>>>> d437562 (resolving)
