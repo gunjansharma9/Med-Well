@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 const Contact = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      {/* Header Section */}
+      {/* Heading */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -15,15 +15,16 @@ const Contact = () => {
       >
         <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
           <span className="bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
-            Get in Touch
+            Contact Us
           </span>
         </h1>
-        <p className="text-lg text-gray-600">We're here to help and answer any questions you might have</p>
+        <p className="text-lg text-gray-600">Reach out to us with any queries or support needs</p>
       </motion.div>
 
-      {/* Main Content */}
+      {/* Contact Section */}
       <div className="grid md:grid-cols-2 gap-12 items-start">
-        {/* Left Side - Contact Image */}
+        
+        {/* Image Block */}
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -32,14 +33,15 @@ const Contact = () => {
           <img 
             className="w-full h-full object-cover"
             src={assets.contact_image} 
-            alt="Contact MedWell" 
+            alt="MedWell Contact" 
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
         </motion.div>
 
-        {/* Right Side - Contact Information */}
+        {/* Info Cards */}
         <div className="space-y-8">
-          {/* Office Address */}
+
+          {/* Address */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -48,17 +50,15 @@ const Contact = () => {
           >
             <div className="flex items-center gap-3 mb-6">
               <FaMapMarkerAlt className="text-3xl text-blue-600" />
-              <h2 className="text-2xl font-semibold text-gray-800">Our Headquarters</h2>
+              <h2 className="text-2xl font-semibold text-gray-800">Main Office</h2>
             </div>
-            <div className="space-y-4 text-gray-600">
+            <div className="space-y-2 text-gray-600">
               <p className="text-lg">MedWell Health Solutions Pvt. Ltd.</p>
-              <p>123, Green Valley Road<br/>
-              Sector 45, Noida<br/>
-              Uttar Pradesh, India - 201301</p>
+              <p>123 Green Valley Road<br/>Sector 45, Noida<br/>U.P., India - 201301</p>
             </div>
           </motion.div>
 
-          {/* Contact Details */}
+          {/* Contact Info */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -84,28 +84,26 @@ const Contact = () => {
             </div>
           </motion.div>
 
-          {/* Careers Section */}
+          {/* Careers */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
             className="bg-blue-50 p-8 rounded-xl"
           >
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Join Our Team</h2>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Careers</h2>
             <p className="text-gray-600 mb-6">
-              We're always looking for passionate healthcare professionals and tech innovators 
-              to join our mission.
+              We're hiring! If you're passionate about healthcare or tech, join our growing team.
             </p>
             <motion.button 
               whileHover={{ scale: 1.05 }}
-              className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-8 py-3 rounded-lg 
-              font-medium hover:shadow-lg transition-all"
+              className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-8 py-3 rounded-lg font-medium hover:shadow-lg transition-all"
             >
-              View Open Positions
+              Explore Jobs
             </motion.button>
           </motion.div>
 
-          {/* Social Media */}
+          {/* Social Media Links */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -118,7 +116,7 @@ const Contact = () => {
         </div>
       </div>
 
-      {/* Contact Form Section */}
+      {/* Contact Form */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -146,7 +144,7 @@ const Contact = () => {
           </div>
           <div className="space-y-4">
             <textarea
-              placeholder="Your Message"
+              placeholder="Write your message here..."
               rows="6"
               className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             ></textarea>
@@ -155,13 +153,13 @@ const Contact = () => {
               className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-8 py-3 rounded-lg 
               font-medium hover:shadow-lg transition-all float-right"
             >
-              Send Message
+              Submit
             </button>
           </div>
         </form>
       </motion.div>
     </div>
-  )
-}
+  );
+};
 
 export default Contact;

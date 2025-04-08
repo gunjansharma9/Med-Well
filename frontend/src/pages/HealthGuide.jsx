@@ -1,12 +1,12 @@
-import React from 'react'
-import SymptomGuide from '../components/SymptomGuide'
+import React from 'react';
+import SymptomGuide from '../components/SymptomGuide';
 
 const HealthGuide = () => {
   return (
-    <div>
-      <SymptomGuide/>
-    </div>
-  )
-}
+    <main className="p-4">
+      <SymptomGuide />
+    </main>
+  );
+};
 
-export default HealthGuide
+export default HealthGuide;
